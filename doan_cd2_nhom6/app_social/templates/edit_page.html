@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body %}
+<div class="col-lg-6">
+    <div class="central-meta">
+        <div class="editing-info">
+            <h5 class="f-title"><i class="ti-lock"></i>Edit Bài Viết</h5>
+            <form id="form-eidt-page" action="{% url 'app_social:edit_fanpage' %}" method="post" class="form-control" style="display: none;" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mt-3">
+                    <input type="hidden" name="page_id" value="{{fanpage.id}}">
+                    <label class="tx-11 font-weight-bold mb-0 text-uppercase">Name Fangape:</label>
+                    <br>
+                    <input class="form-control" type="text" name="name_fanpage" value=" {{fanpage.name}}">
+                </div>
+                <div class="mt-3">
+                    <label class="tx-11 font-weight-bold mb-0 text-uppercase">Description:</label>
+                    <input class="form-control" type="text" name="description_fanpage" value="{{fanpage.description}}">
+                </div>
+                <div class="mt-3">
+                    <label class="tx-11 font-weight-bold mb-0 text-uppercase">Image Fanpage:</label>
+                    <input class="form-control" type="file" name="image_fanpage">
+                </div>
+                <!-- <div class="mt-3">
+                    <label class="tx-11 font-weight-bold mb-0 text-uppercase">Image Cover Fanpage:</label>
+                    <input class="form-control" type="file" name="img_cover_fanpage">
+                </div> -->
+                <br>
+                <button type="submit" id="btn-edit" class="btn btn-primary btn-icon-text btn-edit-profile">
+                    <i class="fa-solid fa-pen-to-square"></i> <a style="color: white; text-decoration:none;"
+                        > Lưu</a>
+                </button>
+            </form>
+</div>
+</div>	
+</div><!-- centerl meta -->
+{% endblock %}  

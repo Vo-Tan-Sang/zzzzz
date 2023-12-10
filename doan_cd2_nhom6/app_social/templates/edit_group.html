@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body %}
+<div class="col-lg-6">
+    <div class="central-meta">
+        <div class="editing-info">
+            <h5 class="f-title"><i class="ti-lock"></i>Edit Group</h5>
+<form action="{% url 'app_social:edit_group' group.id %}" enctype="multipart/form-data" method="POST" display="block" class="editForm">
+    <div class="editForm">
+        {% csrf_token %}
+        <h1>Chỉnh sửa nhóm</h1>
+        <input  type="text" name="name" placeholder="Tiêu đề của nhóm">
+        <input  type="text" name="description" placeholder="Mô tả của nhóm">
+        <div class="layout-img">
+            <img class="img-post" src="{{ group.group_picture.url }}" alt="Img" style="width: 53%;">
+        </div>
+        <label class="file-upload-label">
+           <input type="file" id="fileInput" name="groupPicture" >
+            <i class="fa-solid fa-circle-plus"></i>
+        </label>       
+       
+        <button type="submit">Chỉnh sửa</button>
+        <button type="reset" id="close-overlay" class="close-overlay">Thoát</button>
+    </div>
+</form>
+</div>
+</div>	
+</div><!-- centerl meta -->
+
+{% endblock %}  

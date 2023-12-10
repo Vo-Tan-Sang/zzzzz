@@ -1,0 +1,167 @@
+/* Các lớp chung */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* Khung viết trạng thái */
+  .status-update {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .status-form {
+    display: flex;
+    flex-direction: column;
+  }
+  .rounded-image {
+    width: 50px; 
+    height: 50px; 
+    border-radius: 50%; 
+    object-fit: cover; 
+}
+.flex{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+  ul{
+    list-style: none;
+  }
+  .status-input {
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .status-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  /* Bài viết */
+  .post-item {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .post-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .post-author {
+    font-weight: bold;
+  }
+  
+  .post-date {
+    color: #555;
+  }
+  
+  .post-content {
+    margin-bottom: 10px;
+  }
+  
+  /* Bình luận */
+  .comment-item {
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .comment-header {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .comment-author {
+    font-weight: bold;
+  }
+  
+  .comment-content {
+    margin-bottom: 10px;
+  }
+  
+  /* Phản hồi bình luận */
+  .reply-item {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .reply-author {
+    font-weight: bold;
+  }
+  
+  .reply-text {
+    margin-top: 10px;
+    color: #333;
+  }
+  
+  /* Nút phản hồi */
+  .reply-button {
+    background-color: #3578E5;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .comment-button {
+    background-color: #3578E5;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+
+
+
+  /* Định dạng textarea */
+.comment-textarea {
+    width: 100%; /* Độ rộng của textarea */
+    height: 80px; /* Chiều cao của textarea */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none; /* Ngăn chặn thay đổi kích thước bằng cách kéo thả */
+  }
+  
+  /* Định dạng nút bình luận */
+  .comment-button {
+    width: auto; /* Độ rộng tự động (chia sẻ chiều rộng với nội dung) */
+    padding: 5px 5px; /* Khoảng cách bên trong nút */
+    background-color: #3578E5;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  /* Định dạng container của textarea và nút */
+  .comment-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .delete-button {
+    background-color: #E53E3E; /* Màu đỏ hoặc màu bạn chọn cho nút xóa */
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 5px 10px; /* Tùy chỉnh padding cho nút */
+    margin-top: 10px; /* Tùy chỉnh khoảng cách từ nút đến bình luận */
+  }

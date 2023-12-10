@@ -1,0 +1,560 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+<section>
+    <div class="feature-photo">
+        <figure><img src="{% static 'home/images/resources/timeline-1.jpg' %}" alt=""></figure>
+        {% if user_joined_group %}
+        <div class="add-btn">
+            
+            <!-- <a href="{% url 'app_social:leave_group' group.id %}" title="" data-ripple="">Rời Nhóm</a> -->
+            <form action="{% url 'app_social:leave_group' group.id %}" method="post">
+                {% csrf_token %}
+                <button class="btn btn-primary mx-1" type="submit" style="background: #6c6cdc;">Rời Nhóm</button>
+            </form>
+
+            {% if group.created_by == request.user %}
+            <a href="{% url 'app_social:edit_group' group.id %}" style="    margin: 7px;">Edit</a>
+
+            <form action="{% url 'app_social:delete_group' group.id %}" method="post" >
+                {% csrf_token %}
+                <button class="btn btn-danger mx-1" type="submit" style="background: #681515;">Xóa Nhóm</button>
+            </form>
+            <span>1205 Members</span>
+            {% endif %}
+        
+        </div>
+        {% endif %}
+        <!-- <form class="edit-phto">
+            <i class="fa fa-camera-retro"></i>
+            <label class="fileContainer">
+                Edit Cover Photo
+            <input type="file"/>
+            </label>
+        </form> -->
+        <div class="container-fluid">
+            <div class="row merged">
+                <div class="col-lg-2 col-sm-3">
+                    <div class="user-avatar">
+                        <figure>
+                            <img src="/media/{{ group.group_picture }}" alt="">
+                            <form class="edit-phto">
+                                <i class="fa fa-camera-retro"></i>
+                                <label class="fileContainer">
+                                    Edit Display Photo
+                                    <input type="file"/>
+                                </label>
+                            </form>
+                        </figure>
+                    </div>
+                </div>
+                <div class="col-lg-10 col-sm-9">
+                    <div class="timeline-info">
+                        <ul>
+                            <li class="admin-name">
+                              <h5>{{group.name}}</h5>
+                              
+                            </li>
+                            <li>
+                                <a class="active" href="time-line.html" title="" data-ripple="">time line</a>
+                                
+                               
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section><!-- top area -->
+    
+<section>
+    <div class="gap gray-bg">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="row" id="page-contents">
+                        <div class="col-lg-3">
+                            <aside class="sidebar static">
+                                <div class="widget">
+                                        <h4 class="widget-title">About</h4>
+                                        <ul class="socials">
+                                            <li class="facebook">
+                                                <a title="" href="#"><span>{{group.description}}</span></a>
+                                            </li>
+                                            <li class="twitter">
+                                                <a title="" href="#"><span>Admin group:{{group.created_by}}</span></a>
+                                            </li>
+                                            
+                                        </ul>
+                                    </div>
+                                <div class="widget">
+                                    <!-- <h4 class="widget-title">Shortcuts</h4>
+                                    <ul class="naves">
+                                        <li>
+                                            <i class="ti-clipboard"></i>
+                                            <a href="newsfeed.html" title="">News feed</a>
+                                        </li>
+                                        <li>
+                                            <i class="ti-mouse-alt"></i>
+                                            <a href="inbox.html" title="">Inbox</a>
+                                        </li>
+                                        <li>
+                                            <i class="ti-files"></i>
+                                            <a href="fav-page.html" title="">My pages</a>
+                                        </li>
+                                        
+                                    </ul> -->
+                                    
+                                </div><!-- Shortcuts -->
+                              
+                                <div class="widget stick-widget">
+                                    <h4 class="widget-title">Thành Viên Đã Tham Gia</h4>
+                                    <ul class="followers">
+                                        {% for member in group_members %}
+                                        <li>
+                                            {% if member != request.user %}
+                                            <figure><img src="/media/{{member.avatar}}" alt="" style="    height: 40px;
+                                                width: 45px;"></figure>
+                                            <div class="friend-meta">
+                                                <h4><a href="{% url 'app_social:user_profile' member.username %}" title="">{{member.last_name}}
+                                                    {{member.first_name}}</a></h4>                                                
+                                            </div>
+                                            {% endif %}
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div><!-- who's members -->
+                            </aside>
+                        </div><!-- sidebar -->
+                        <div class="col-lg-6">
+                            <div class="loadMore">
+                                <div class="central-meta item">
+                                    <div class="new-postbox">
+                                        <figure>
+                                            <img src="/media/{{ user.avatar }}" alt=""style="height: 48px;
+                                            width: 47px;">
+                                        </figure>
+                                        <div class="newpst-input">
+                                            <form  method="post" enctype="multipart/form-data">
+                                                {% csrf_token %}
+                                                <textarea name="content"rows="2" placeholder="Write Something"></textarea>
+                                                <div class="attachments">
+                                                    <ul>
+                                                        <li>
+                                                            <i class="fa fa-music"></i>
+                                                            <label class="fileContainer">
+                                                                <input type="file">
+                                                            </label>
+                                                        </li>
+                                                        <li>
+                                                            <i class="fa fa-image"></i>
+                                                            <label class="fileContainer">
+                                                                <input type="file" id="fileInput"name="images" multiple>
+                                                            </label>
+                                                        </li>
+                                                        <li>
+                                                            <i class="fa fa-video-camera"></i>
+                                                            <label class="fileContainer">
+                                                                <input type="file" id="videoInput"name="videos" multiple>
+                                                            </label>
+                                                        </li>
+                                                        <li>
+                                                            <i class="fa fa-camera"></i>
+                                                            <label class="fileContainer">
+                                                                <input type="file">
+                                                            </label>
+                                                        </li>
+                                                        <li>
+                                                            <button type="submit">Publish</button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div><!-- add post new box -->
+                               
+                                {% for post in group_posts  %}
+                                    <div class="central-meta item">
+                                       <div class="user-post">
+                                          <div class="friend-info">
+                                            <div class="dropdown_">
+                                                
+                                            </div>
+                                             <figure>                                             
+                                                <img src="/media/{{ post.author.avatar }}" alt="" style="    height: 48px;
+                                                width: 47px;    ">                                               
+                                             </figure>
+                                             <div class="friend-name">
+                                                <ins><a href="{% url 'app_social:user_profile' post.author.username %}" title="">{{ post.author.username }} </a></ins>
+                                                <span>published:{{ post.created_at }}</span>                                       
+                                             </div>
+                                             
+                                             <p>{{ post.content }}</p>
+                                             <div class="post-meta">
+                                                <!-- {% for image in post.images.all %}
+                                                <span class="profile-img-content"
+                                                style="background-image: url({{ image.image.url }});"></span>
+                                                {% endfor %} -->
+                                                <!-- <div class="image-gallery">
+                                                   {% for image in post.images.all %}
+                                                   <div class="custom-image-item"style="background-image: url({{ image.image.url }});width: 500px; height: 500px; border: 1px solid black"></div>
+                                                   
+                                                   {% endfor %}
+                                                </div> -->
+                                                <div class="video-container">
+                                            
+                                                    {% for video in post.video.all %}
+                                                     <div class="video-wrapper">
+                                                       <video controls style="        width: 652px;">
+                                                           {% csrf_token %}
+                                                         <source src="{{video.video.url}}" type="video/mp4">
+                                                       </video>
+                                                     </div>
+                                                   {% endfor %}
+                                               </div>
+                                                <div class="image-gallery">
+                                                   <!-- {% for image in post.images.all %}
+                                                   <a class="strip" href="url({{ image.image.url }})" title="" data-strip-group="mygroup" data-strip-group-options="loop: false">
+                                                      <img src="url({{ image.image.url }})" alt=""><div class="custom-image-item"style=" height:300px  ; ;width:300px ; background-image: url({{ image.image.url }}); background-size: cover; background-position: center; background-repeat: no-repeat; "></div></a>
+                                                   {% endfor %} -->
+                                                   {% for image in post.images.all %}
+                                                   <a class="strip" href="{{ image.image.url }}" title="" data-strip-group="mygroup" data-strip-group-options="loop: false">
+                                                      <img src="url({{ image.image.url }})" alt=""><div class="custom-image-item"style=" height:300px  ; ;width:300px ; background-image: url({{ image.image.url }}); background-size: cover; background-position: center; background-repeat: no-repeat; "></div>
+                                                   <!-- <div class="custom-image-item" style="height: 300px; width: 300px; background-image: url({{ image.image.url }}); background-size: cover; background-position: center; background-repeat: no-repeat;"></div> -->
+                                                    </a>
+                                                   {% endfor %}
+            
+                                                </div>
+                                                <div class="we-video-info">
+                                                   <ul>
+                                                      {% if post.liked == 'True' %}
+                                                      <li>
+                                                         <a href="{% url 'app_social:like_post_group' post_id=post.id group_id=group.id %}">
+                                                            <span class="like" data-toggle="tooltip" title="like">
+                                                               <i class="ti-heart"></i>
+                                                               <ins>{{post.likes.count}}</ins>
+                                                            </span>
+                                                           
+                                                         </a>
+                                                      </li>
+                                                      {% else %}
+                                                      <li>
+                                                         <a href="{% url 'app_social:like_post_group' post_id=post.id group_id=group.id  %}">
+                                                            <span class="dislike" data-toggle="tooltip" title="dislike">
+                                                               <i class="ti-heart-broken"></i>
+                                                               <ins>{{post.likes.count}}</ins>
+                                                            </span>
+                                                         </a>
+                                                      </li>
+                                                      {% endif %}
+                                                      <li>
+                                                         <span class="views" data-toggle="tooltip" title="views">
+                                                            <i class="fa fa-eye"></i>
+                                                            <ins>1.2k</ins>
+                                                         </span>
+                                                      </li>
+                                                      <li>
+                                                         <span class="comment" data-toggle="tooltip" title="Comments">
+                                                            <i class="fa fa-comments-o"></i>
+                                                            <ins>52</ins>
+                                                         </span>
+                                                      </li>
+            
+                                                      <li class="social-media">
+                                                         <div class="menu">
+                                                            <div class="btn trigger"><i class="fa fa-share-alt"></i></div>
+                                                            <div class="rotater">
+                                                                <div class="btn btn-icon"><a href="{% url 'app_social:group_detail' group.id %}" title=""><svg style="margin-bottom: -7px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                                                                    <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                                                                  </svg></a></div>
+                                                            </div>
+                                                            <div class="rotater">
+                                                                <div class="btn btn-icon"><a href="{% url 'app_social:edit_Grouppost' post.id%}" title=""><svg style="margin-bottom: -7px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                                                                    <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
+                                                                  </svg></a></div>
+                                                            </div>	
+            
+                                                         </div>
+                                                      </li>
+                                                   </ul>
+                                                </div>
+                                                
+                                             </div>
+                                          </div>
+                                         
+                                          <div class="coment-area">
+                                            
+                                            <ul class="we-comet">
+                                                {% for comment in post.comments.all %}
+                                               <li>
+                                                  <div class="comet-avatar">
+                                                     <img src="/media/{{comment.author.avatar}}" alt="" style="    height: 40px;
+                                                     width: 41px;">
+                                                  </div>
+                                                  <div class="we-comment">
+                                                     <div class="coment-head">
+                                                        <h5><a href="time-line.html" title="">{{comment.author.last_name}} {{comment.author.first_name}}</a></h5>
+                                                        <span>{{comment.created_at}}</span>                                                                                                                                                                                                                    
+                                                        <p>{{comment.content}}</p>
+                                                        {% if user_joined_group %}
+                                                        <div class="comment" id="comment_{{ comment.id }}">                                                     
+                                                            <a class="btn btn-primary btn-sm reply-button d-inline-block" style="background: none; border: none;        margin-top: -6px; " data-comment-id="{{ comment.id }}">Reply</i></a>
+                                                        
+                                                            <!-- Reply Form (initially hidden) -->
+                                                            
+                                                            <form method="post" class="reply-form" style="display: none;"
+                                                            action="{% url 'app_social:group_detail' group.id %}">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                                                            <textarea class="comment-textarea" name="text"
+                                                            placeholder="Viết bình luận..."></textarea>
+                                                            <button class="comment-button" type="submit"
+                                                            name="reply_comment">Send</button>
+                                                            </form>
+                                                            <!-- Reply Container -->
+                                                            <div class="replies-container">
+                                                                <!-- Display replies here -->
+                                                            </div>
+                                                        </div>
+                                                        {% endif %} 
+                                                        {% if comment.author == request.user %}
+                                                        {% if user_joined_group %}
+                                                        <div class="comment" id="comment_{{ comment.id }}">                                                     
+                                                        <a class="btn btn-primary btn-sm reply-button d-inline-block" style="background: none; border: none;    margin-left: 60px;
+                                                        margin-top: -54px; " data-comment-id="{{ comment.id }}">Edit</i></a>
+                                        
+                                                        
+                                                        <form action="{% url 'app_social:commentGroupPost' post.id %}" method="post"class="reply-form"style="display: none;">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="return_group" value="{{group.id}}">
+                                                        <input type="hidden" name="comment_id" value="{{comment.id}}">
+                                                        <textarea required class="reply-textarea" name="content" placeholder="Nhập bình luận của bạn">{{comment.content}}</textarea>
+                                                        <button class="submit-reply" type="submit" name="edit_comment">Edit</button>   
+                                                        </form>
+                                                        </div>
+                                                        {% endif %}
+                                                        {% endif %}                                                  
+                                                        {% if user_joined_group %}
+                                                        {% if post.author == user or comment.author == user %}                                                    
+                                                        <div class="xoa" style="margin-top: -50px;;
+                                                        margin-left: 55px;">
+                                                        <a href="{% url 'app_social:deleteCommentGroupPost' comment.id  %}?return-g={{group.id}}" style="margin-left: 60px;
+                                                        margin-top: -54px; ">Xóa</a>                                         
+                                                        </div>
+                                                        {% endif %}
+                                                        {% endif %}
+                                                  </div>
+                                                  </div>
+                                                  {% for reply in comment.replies.all %}
+                                                    {% if reply.comment.id == comment.id %}
+                                                  <ul>
+                                                    
+                                                     <li>
+                                                        <div class="comet-avatar">
+                                                           <img src="/media/{{ reply.author.avatar  }}" alt=""style="    height: 40px;
+                                                           width: 41px;">
+                                                        </div>
+                                                        <div class="we-comment">
+                                                           <div class="coment-head">
+                                                              <h5><a href="time-line.html" title="">{{reply.author.last_name}} {{reply.author.first_name}}</a></h5>
+                                                              <span>{{reply.created_at}}</span>                                                               
+                                                            <p>{{reply.text}}</p>
+                                                            {% if user_joined_group %}
+                                                            {% if comment.author == request.user %} 
+                                                           <div class="comment" id="comment_{{ comment.id }}">                                                     
+                                                            <a class="btn btn-primary btn-sm reply-button d-inline-block" style="background: none; border: none;       margin-left: 17px;
+                                                            margin-top: -42px;" data-comment-id="{{ comment.id }}">Edit</i></a>
+                                            
+                                                            
+                                                            <form action="{% url 'app_social:commentGroupReplyPost' post.id %}" method="post"class="reply-form"style="display: none;">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="return_group" value="{{group.id}}">
+                                                            <input type="hidden" name="reply" value="{{reply.id}}">
+                                                            <textarea required class="reply-textarea" name="content" placeholder="Nhập bình luận của bạn">{{reply.text}}</textarea>
+                                                            <button class="submit-reply" type="submit" name="edit_reply">Edit</button>  
+                                                            </form>
+                                                            </div>
+                                                            {% endif %}
+                                                            {% endif %}
+                                                            <div class="xoa" style="    margin-top: -43px;
+                                                            margin-left: 78px;">
+                                                           {% if user_joined_group %}
+                                                           {% if post.author == user or comment.author == user %}                                           
+                                                            <a href="{% url 'app_social:deleteReplyCommentGroupPost' reply.id  %}?return-g={{group.id}}">Xóa</a>
+                                                            {% endif %}
+                                                            {% endif %}
+                                                            </div>
+                                                           </div>
+                                                           
+                                                           
+                                                        </div>
+                                                     </li>
+                                                     
+                                                  </ul>
+                                                  {% endif %}
+                                                {% endfor %}
+                                               </li>
+                                               {% endfor %}
+                                              
+
+
+                                               {% if user_joined_group %}
+                                               <li class="post-comment">
+                                                  <div class="comet-avatar">
+                                                     <img src="/media/{{ user.avatar }}" alt="" style="width: 100px;
+                                                     height: 39px;">
+                                                  </div>
+                                                  <div class="post-comt-box">
+                                                    <form class="flex-fill ps-2" method="post"
+                                                    action="{% url 'app_social:group_detail' group.id %}"> 
+                                                    <input type="hidden" name="post_id" value="{{ post.id }}">
+                                                        {% csrf_token %}
+                                                        <input type="text" name="content"
+                                                        class="form-control rounded-pill bg-white bg-opacity-15"
+                                                        style="padding-right: 120px;"
+                                                        placeholder="Write a comment..." />
+                                                        
+                                                         
+                                                        <button class="comment-button" type="submit"
+                                                        name="add_comment">Comment</button>
+                                                     </form>
+                                                  </div>
+                                               </li>
+                                               {% endif %}
+                                            </ul>
+                                            
+                                         </div>
+                                        
+                                          
+                                       </div>
+                                    </div>
+                                    
+                                {% endfor %}                                           
+                            </div>
+                        </div><!-- centerl meta -->
+                        <div class="col-lg-3">
+                            <aside class="sidebar static">
+                                <div class="widget">
+                                    <div class="banner medium-opacity bluesh">
+                                        <div style="background-image: url(images/resources/baner-widgetbg.jpg)" class="bg-image"></div>
+                                        <div class="baner-top">
+                                            <span><img src="images/book-icon.png" alt=""></span>
+                                            <i class="fa fa-ellipsis-h"></i>
+                                        </div>
+                                        <div class="banermeta">
+                                            <p>
+                                                create your own favourit page.
+                                            </p>
+                                            <span>like them all</span>
+                                            <a href="#" title="" data-ripple="">start now!</a>
+                                        </div>
+                                    </div>											
+                                </div>
+                                <div class="widget friend-list stick-widget">
+                                    <h4 class="widget-title">Friends</h4>
+                                    <div id="searchDir"></div>
+                                    <ul id="people-list" class="friendz-list">
+                                        <li>
+                                            <figure>
+                                                <img src="images/resources/friend-avatar.jpg" alt="">
+                                                <span class="status f-online"></span>
+                                            </figure>
+                                            <div class="friendz-meta">
+                                                <a href="time-line.html">bucky barnes</a>
+                                                <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4136282f352433322e2d25243301262c20282d6f222e2c">[email&#160;protected]</a></i>
+                                            </div>
+                                        </li>
+                                       
+                                            
+                                       
+                                    </ul>
+                                    
+                                </div><!-- friends list sidebar -->
+                            </aside>
+                        </div><!-- sidebar -->
+                    </div>	
+                </div>
+            </div>
+        </div>
+    </div>	
+
+</section>
+
+{% endblock %}
+<script>
+    function openEditForm() {
+        var overlay = document.getElementById('overlay');
+        overlay.style.display = 'block';
+    }
+
+    function closeEditForm() {
+        var overlay = document.getElementById('overlay');
+        overlay.style.display = 'none';
+    }
+</script>
+
+   
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    // Lấy tất cả các nút "Reply" và biểu mẫu reply
+    var replyButtons = document.querySelectorAll(".reply-button");
+
+    // Lặp qua từng nút "Reply"
+    replyButtons.forEach(function (button) {
+        // Gán sự kiện khi nút "Reply" được nhấp
+        button.addEventListener("click", function () {
+            // Lấy ID từ thuộc tính data-comment-id
+            var commentId = button.getAttribute("data-comment-id");
+
+            // Hiển thị hoặc ẩn biểu mẫu reply tương ứng
+            var replyForm = document.getElementById("comment_" + commentId).querySelector(".reply-form");
+            replyForm.style.display = replyForm.style.display === "none" ? "block" : "none";
+        });
+    });
+
+    // Lắng nghe sự kiện khi gửi biểu mẫu reply
+    document.addEventListener("submit", function (event) {
+        // Kiểm tra xem biểu mẫu có class là "reply-form" không
+        if (event.target.classList.contains("reply-form")) {
+            event.preventDefault(); // Ngăn chặn việc submit mặc định của form
+
+            // Lấy dữ liệu từ biểu mẫu
+            var formData = new FormData(event.target);
+            formData.append("comment_id", commentId); // Gửi ID của comment
+
+            // Gửi Ajax request
+            fetch("/your-reply-endpoint/", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Xử lý kết quả sau khi gửi reply thành công
+                if (data.success) {
+                    // Cập nhật giao diện người dùng nếu cần
+                    alert("Reply sent successfully!");
+                    // Hiển thị lại form nếu cần
+                    var replyForm = document.getElementById("comment_" + commentId).querySelector(".reply-form");
+                    replyForm.style.display = "none";
+                    // Hiển thị reply mới nếu có
+                    var repliesContainer = document.getElementById("comment_" + commentId).querySelector(".replies-container");
+                    repliesContainer.innerHTML += "<p>" + data.replyContent + "</p>";
+                } else {
+                    alert("Error sending reply.");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("An error occurred while sending reply.");
+            });
+        }
+    });
+});
+
+</script>

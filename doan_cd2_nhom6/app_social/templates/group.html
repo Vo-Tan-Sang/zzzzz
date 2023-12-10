@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body %}
+<div class="col-lg-6">
+    <div class="central-meta">
+        <div class="editing-info">
+            <h5 class="f-title"><i class="ti-lock"></i>Group</h5>
+            
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">	
+                    <input required type="text" name="name" id="name">
+                  <label class="control-label" for="input">Name</label><i class="mtrl-select"></i>
+                </div>
+                <div class="form-group">	
+                  <input name="description" id="description" required="required">
+                  <label class="control-label" for="input">Description</label><i class="mtrl-select"></i>
+                </div>
+                <div class="form-group">	
+                    <input type="file" name="group_picture" id="group_picture">
+                  <label class="control-label" for="input">Image</label><i class="mtrl-select"></i>
+                </div>                
+                <div class="submit-btns">
+                    <button class="btn" type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>	
+</div><!-- centerl meta -->
+{% endblock %}  

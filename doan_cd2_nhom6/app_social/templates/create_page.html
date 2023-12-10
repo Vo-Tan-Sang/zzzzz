@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body %}
+<div class="col-lg-6">
+    <div class="central-meta">
+        <div class="editing-info">
+            <h5 class="f-title"><i class="ti-lock"></i>Edit Group</h5>
+            <form action="{% url 'app_social:create_fanpage' %}" class="form-group" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label for="name">Name Fanpage</label>
+                <input class="form-control" required type="text" name="name" id="name">
+                <label for="description">Description</label>
+                <textarea class="form-control" required name="description" id="description"></textarea>
+                <label for="img_fanpage">Image Fanpage</label>
+                <input class="form-control-file" type="file" name="img_fanpage">
+                <!-- <label for="img">Image Cover Fanpage</label>
+                <input class="form-control-file" type="file" name="img_cover_fanpage"> -->
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </form>
+</div>
+</div>	
+</div><!-- centerl meta -->
+
+{% endblock %}  

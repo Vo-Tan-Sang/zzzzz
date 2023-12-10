@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+<section>
+	<div class="gap gray-bg">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="row" id="page-contents">
+						<div class="col-lg-3">
+							<aside class="sidebar static">
+								<div class="widget">
+									<h4 class="widget-title">Shortcuts</h4>
+									<ul class="naves">
+										<li>
+											<i class="ti-clipboard"></i>
+											<a href="{% url 'app_social:index' %}" title="">Trang Chủ</a>
+										</li>
+										<li>
+											<i class="ti-clipboard"></i>
+											<a href="{% url 'app_social:group' %}" title="">Create Group</a>
+										</li>
+																											
+										
+									</ul>
+								</div><!-- Shortcuts -->								
+							</aside>
+						</div><!-- sidebar -->
+						<div class="col-lg-6">
+							<div class="central-meta">
+								<div class="groups">
+									<span><i class="fa fa-users"></i> Groups Đã Tạo</span>
+								</div>
+								<ul class="nearby-contct">
+									{% for group in user_groups %}
+									<li>
+										<div class="nearly-pepls">
+											<figure>
+												<a href="time-line.html" title="">
+													<img src="{{ group.group_picture.url }}"
+														alt=""style="    height: 68px;
+														width: 73px;"></a>
+											</figure>
+											<div class="pepl-info">
+												<h4><a href="{% url 'app_social:group_detail' group.id %}" title="">{{group.name}}</a></h4>
+												<span>{{group.description}}</span>
+												<em>32k Members</em>												
+											</div>
+										</div>
+									</li>
+									{% endfor %}
+								</ul>
+								<div class="lodmore"><button class="btn-view btn-load-more"></button></div>
+							</div><!-- photos -->
+						</div><!-- centerl meta -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,399 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block body %}
+
+<section>
+	<div class="feature-photo">
+        
+		<figure>
+            
+            <img src="{% static 'home/images/resources/timeline-1.jpg' %}" alt="">
+             
+        </figure>
+
+		<div class="add-btn">
+			{% if user in fanpage.likes.all %}
+			<a href="{% url 'app_social:unlike_fanpage' fanpage.id %}" title="" data-ripple="">Hủy Bỏ({{fanpage.likes.count}})</a>
+            {% else %}
+            <a href="{% url 'app_social:like_fanpage' fanpage.id %}" title="" data-ripple="">Thích({{fanpage.likes.count}})</a>
+			{% endif %}
+
+            {% if user|striptags != fanpage.author.username|striptags %}
+            {% if user|striptags != fanpage.author.username|striptags and not user in fanpage.members.all %}
+			<a href="{% url 'app_social:join_fanpage' fanpage.id %}" title="" data-ripple="">Theo Dõi</a>
+            {% else %}
+            <a href="{% url 'app_social:leave_fanpage' fanpage.id %}" title="" data-ripple="">Hủy Theo Dõi</a>
+			{% endif %}
+            {% endif %}
+		</div>
+		<form class="edit-phto">
+			<i class="fa fa-camera-retro"></i>
+			<label class="fileContainer">
+				Edit Page
+				<input type="file" />
+			</label>
+		</form>
+		<div class="container-fluid">
+			<div class="row merged">
+				<div class="col-lg-2 col-sm-3">
+					<div class="user-avatar">
+						<figure>
+							
+							<img src="/media/{{ fanpage.imgFanpage }}" alt="">
+							<form class="edit-phto">
+								{% csrf_token %}
+								<i class="fa fa-camera-retro"></i>
+								<label class="fileContainer">
+									Edit Display Photo
+									<input type="file" name="avatar"/>
+                                    
+								</label>
+								
+							</form>
+						</figure>
+					</div>
+				</div>
+				<div class="col-lg-10 col-sm-9">
+					<div class="timeline-info">
+						<ul>
+							<li class="admin-name">
+								<h5>{{fanpage.name}}</h5>
+								<!-- <span>Group Admin</span> -->
+							</li>
+							<li>
+								<a class="active" href="" title="" data-ripple="">Time
+									Line</a>
+								
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section><!-- top area -->
+
+<section>
+	<div class="gap gray-bg">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="row" id="page-contents">
+						<div class="col-lg-3">
+							<aside class="sidebar static">
+
+								<div class="widget">
+									<h4 class="widget-title">About</h4>
+									<ul class="naves">
+										<li>
+											<span>Author: {{fanpage.author.last_name}} {{fanpage.author.first_name}} </span>
+										</li>
+										<li>
+											<span>Description: {{fanpage.description}}</span>
+										</li>										
+									</ul>
+								</div><!-- Shortcuts -->
+
+								
+							</aside>
+						</div><!-- sidebar -->
+						<div class="col-lg-6">
+							<div class="loadMore">
+                                {% if user|striptags == fanpage.author.username|striptags %}
+								<div class="central-meta item">
+									<div class="new-postbox">
+										<figure>
+											<img src="/media/{{ user.avatar }}" alt="" style="    height: 68px;
+												width: 73px;">
+										</figure>
+										<div class="newpst-input">
+											<form action="{% url 'app_social:create_post_fanpage' %}" method="POST" enctype="multipart/form-data">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="user" value="{{user}}">
+                                            <input type="hidden" name="page_id" value="{{fanpage.id}}">
+												<textarea rows="2" placeholder="write something"name="content"></textarea>
+												<div class="attachments">
+													<ul>
+														<li>
+															<i class="fa fa-music"></i>
+															<label class="fileContainer">
+																<input type="file">
+															</label>
+														</li>
+														<li>
+															<i class="fa fa-image"></i>
+															<label class="fileContainer" >
+																<input type="file"name="images" multiple>
+															</label>
+														</li>
+														<li>
+															<i class="fa fa-video-camera"></i>
+															<label class="fileContainer">
+																<input type="file"name="videos" multiple>
+															</label>
+														</li>
+														<li>
+															<i class="fa fa-camera"></i>
+															<label class="fileContainer">
+																<input type="file">
+															</label>
+														</li>
+														<li>
+															<button type="submit">Publish</button>
+														</li>
+													</ul>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div><!-- add post new box -->
+                                {% endif %}
+                               
+								{% for post in posts %}
+								
+								<div class="central-meta item">
+									<div class="user-post">
+										<div class="friend-info">
+											
+											<figure>
+												<img src="/media/{{ post.fanpage.author.avatar }}" alt="" style="    height: 48px;
+												width: 47px;">
+											</figure>											
+											
+											<div class="friend-name">
+												<ins><a href="time-line.html" title="">{{ post.fanpage.author.last_name }} {{ post.fanpage.author.first_name }} </a></ins>
+												
+												<span>published:{{ post.created_at }}</span>
+													
+												
+											</div>
+											<p class="mb-3 tx-14">{{ post.content }}</p>
+											
+											<div class="post-meta">
+												<div class="video-container">
+                                
+													{% for video in post.video.all %}
+													  <div class="video-wrapper">
+														<video controls style="    width: 730px;">
+															{% csrf_token %}
+														  <source src="{{video.video.url}}" type="video/mp4">
+														</video>
+													  </div>
+													{% endfor %}
+												</div>
+												 <div class="image-gallery">
+													<!-- {% for image in post.images.all %}
+													<a class="strip" href="url({{ image.image.url }})" title="" data-strip-group="mygroup" data-strip-group-options="loop: false">
+													   <img src="url({{ image.image.url }})" alt=""><div class="custom-image-item"style=" height:300px  ; ;width:300px ; background-image: url({{ image.image.url }}); background-size: cover; background-position: center; background-repeat: no-repeat; "></div></a>
+													{% endfor %} -->
+													{% for image in post.images.all %}
+													<a class="strip" href="{{ image.image.url }}" title="" data-strip-group="mygroup" data-strip-group-options="loop: false">
+													   <img src="url({{ image.image.url }})" alt=""><div class="custom-image-item"style=" height:300px  ; ;width:300px ; background-image: url({{ image.image.url }}); background-size: cover; background-position: center; background-repeat: no-repeat; "></div>
+													<!-- <div class="custom-image-item" style="height: 300px; width: 300px; background-image: url({{ image.image.url }}); background-size: cover; background-position: center; background-repeat: no-repeat;"></div> -->
+													 </a>
+													{% endfor %}
+			 
+												 </div>
+												<div class="we-video-info">
+													<ul>
+														{% if post.liked == 'True' %}
+														<li>
+														   <a href="{% url 'app_social:like_post_fanpage' post.id %}?page_id={{fanpage.id}}">
+															  <span class="like" data-toggle="tooltip" title="like">
+																 <i class="ti-heart"></i>
+																 <ins>{{post.likes.count}}</ins>
+															  </span>
+															 
+														   </a>
+														</li>
+														{% else %}
+														<li>
+														   <a href="{% url 'app_social:like_post_fanpage' post.id %}?page_id={{fanpage.id}}">
+															  <span class="dislike" data-toggle="tooltip" title="dislike">
+																 <i class="ti-heart-broken"></i>
+																 <ins>{{post.likes.count}}</ins>
+															  </span>
+														   </a>
+														</li>
+														{% endif %}
+														<li>
+															<span class="views" data-toggle="tooltip" title="views">
+																<i class="fa fa-eye"></i>
+																<ins>1.2k</ins>
+															</span>
+														</li>
+														<li>
+															<span class="comment" data-toggle="tooltip"
+																title="Comments">
+																<i class="fa fa-comments-o"></i>
+																<ins>52</ins>
+															</span>
+														</li>
+														
+														
+														<li class="social-media">
+															<div class="menu">
+																<div class="btn trigger"><i class="fa fa-share-alt"></i>
+																</div>
+																<div class="rotater">
+																	<div class="btn btn-icon"><a href="{% url 'app_social:delete_post' post.id %}" title=""><svg style="margin-bottom: -7px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+																		<path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+																	  </svg></a></div>
+																</div>
+																<div class="rotater">
+																	<div class="btn btn-icon"><a href="{% url 'app_social:edit_post' post.id %}" title=""><svg style="margin-bottom: -7px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+																		<path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
+																	  </svg></a></div>
+																</div>																
+
+															</div>
+														</li>
+														
+													</ul>
+												</div>
+												
+											</div>
+										</div>
+										<div class="coment-area">
+                                            
+											<ul class="we-comet">
+											   {% if user.username %}
+										  {% for comment in comments %}
+											{% if comment.post.id == post.id %}
+											   <li>
+												  <div class="comet-avatar">
+													 <img src="/media/{{comment.author.avatar}}" alt="" style="    height: 40px;
+													 width: 41px;">
+												  </div>
+												  <div class="we-comment">
+													 <div class="coment-head">
+														<h5><a href="time-line.html" title="">{{comment.author.last_name}} {{comment.author.first_name}}</a></h5>
+														<span>{{comment.created_at}}</span>                                                                                                                                                                                                                    
+														<p>{{comment.content}}</p>
+													   
+														<div class="comment" id="comment_{{ comment.id }}">                                                     
+															<a class="btn btn-primary btn-sm reply-button d-inline-block" style="background: none; border: none;        margin-top: -6px; " data-comment-id="{{ comment.id }}">Reply</i></a>
+														
+															<!-- Reply Form (initially hidden) -->
+															
+															<form method="post" class="reply-form" style="display: none;"
+															action="{% url 'app_social:comment_post_fanpage' post.id %}">
+															{% csrf_token %}
+                                                            <input type="hidden" name="page_id" value="{{fanpage.id}}">
+                                                            <input type="hidden" name="comment_id" value="{{comment.id}}">
+															<textarea class="comment-textarea" name="text"
+															placeholder="Viết bình luận..."></textarea>
+															<button class="comment-button" type="submit"
+															name="reply_comment">Send</button>
+															</form>
+															<!-- Reply Container -->
+															<div class="replies-container">
+																<!-- Display replies here -->
+															</div>
+														</div>
+														
+														{% if comment.author == user %}
+														<div class="comment" id="comment_{{ comment.id }}">                                                     
+														<a class="btn btn-primary btn-sm reply-button d-inline-block" style="background: none; border: none;    margin-left: 60px;
+														margin-top: -54px; " data-comment-id="{{ comment.id }}">Edit</i></a>
+										
+														
+														<form action="{% url 'app_social:comment_post_fanpage' post.id %}" method="post"class="reply-form"style="display: none;">
+														{% csrf_token %}
+                                                        <input type="hidden" name="page_id" value="{{fanpage.id}}">
+                                                        <input type="hidden" name="comment_id" value="{{comment.id}}">
+														<textarea required class="reply-textarea" name="content" placeholder="Nhập bình luận của bạn">{{comment.content}}</textarea>
+														<button class="submit-reply" type="submit" name="edit_comment">Edit</button>   
+														</form>
+														</div>
+														
+														{% endif %}                                                  
+														{% if user == fanpage.author or comment.author == user %}                                                  
+														<div class="xoa" style="margin-top: -50px;;
+														margin-left: 55px;">
+														<a href="{% url 'app_social:deleteCommentFanpage' comment.id  %}?page_id={{fanpage.id}}" style="margin-left: 60px;
+														margin-top: -54px; ">Xóa</a>                                         
+														</div>
+														{% endif %}
+														
+												  </div>
+												  </div>
+												  {% for reply in reply_comment_post %}
+												  {% if reply.comment.id == comment.id %}  
+												  <ul>
+													
+													 <li>
+														<div class="comet-avatar">
+														   <img src="{{reply.author.avatar.url}}" alt=""style="    height: 40px;
+														   width: 41px;">
+														</div>
+														<div class="we-comment">
+														   <div class="coment-head">
+															  <h5><a href="time-line.html" title="">{{reply.author.last_name}} {{reply.author.first_name}}</a></h5>
+															  <span>{{reply.created_at}}</span>                                                               
+															<p>{{reply.text}}</p>
+															
+																													
+														   </div>
+														   
+														   
+														</div>
+													 </li>
+													 
+												  </ul>
+												  {% endif %}
+												{% endfor %}
+											   </li>
+											   {% endif %}
+											   {% endfor %}
+											  
+		   
+		   
+											  
+											   <li class="post-comment">
+												  <div class="comet-avatar">
+													 <img src="/media/{{ user.avatar }}" alt="" style="    width: 46px;
+													 height: 41px;">
+												  </div>
+												  <div class="post-comt-box">
+													<form class="flex-fill ps-2" method="post"
+													action="{% url 'app_social:comment_post_fanpage' post.id %}"> 
+													<input type="hidden" name="page_id" value="{{fanpage.id}}">
+														{% csrf_token %}
+														<input type="text" name="content"
+														class="form-control rounded-pill bg-white bg-opacity-15"
+														style="padding-right: 120px;"
+														placeholder="Write a comment..." />
+														
+														 
+														<button class="comment-button" type="submit"
+														name="add_comment">Comment</button>
+													 </form>
+												  </div>
+											   </li>
+											  
+											</ul>
+											
+										 </div>
+										 {% endif %}
+									</div>
+								</div>
+								{% endfor %}
+							</div>
+						</div><!-- centerl meta -->
+
+                   
+
+                       
+                 
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+{% endblock %}
+

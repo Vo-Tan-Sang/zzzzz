@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body %}
+<div class="col-lg-6">
+    <div class="central-meta">
+        <div class="editing-info">
+            <h5 class="f-title"><i class="ti-lock"></i>Edit Bài Viết</h5>
+            
+            <form action="{% url 'app_social:edit_post' post.id %}" method="POST"
+            enctype="multipart/form-data" display="block" class="editForm" class="editForm">
+            {% csrf_token %}
+            <h1>Chỉnh sửa bài viết</h1>
+            <input type="text" name="content" placeholder="Bạn đang nghĩ gì?">
+            <div class="layout-img">
+                {% for image in post.images.all %}
+                <a class="strip" href="{{ image.image.url }}" title="" data-strip-group="mygroup" data-strip-group-options="loop: false">
+                   <img src="url({{ image.image.url }})" alt=""><div class="custom-image-item"style=" height:300px  ; ;width:300px ; background-image: url({{ image.image.url }}); background-size: cover; background-position: center; background-repeat: no-repeat; "></div>
+                <!-- <div class="custom-image-item" style="height: 300px; width: 300px; background-image: url({{ image.image.url }}); background-size: cover; background-position: center; background-repeat: no-repeat;"></div> -->
+                 </a>
+                {% endfor %}
+            </div>
+            <div class="video-container">
+                                
+                {% for video in post.video.all %}
+                  <div class="video-wrapper">
+                    <video controls style="width: 600px;">
+                        {% csrf_token %}
+                      <source src="{{video.video.url}}" type="video/mp4">
+                    </video>
+                  </div>
+                {% endfor %}
+            </div>
+
+            <label class="file-upload-label">
+                <input type="file" id="fileInput" name="images" multiple>
+                <i class="fa-solid fa-circle-plus"></i>
+            </label>
+            <label class="file-upload-label">
+                <input type="file" id="fileInput" name="videos" multiple>
+                <i class="fa-solid fa-video"></i>
+            </label>           
+            <button type="submit">Chỉnh sửa</button>
+            <button type="reset" id="close-overlay" class="close-overlay">Thoát</button>
+
+        </form>
+        </div>
+    </div>	
+</div><!-- centerl meta -->
+{% endblock %}  
